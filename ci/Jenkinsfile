@@ -1,0 +1,44 @@
+def ZIP_NODE
+def CODE_VERSION
+pipeline{
+    /*A declarative pipeline*/
+    agent {
+        /*Agent section*/ 
+        // where would you like to run the code 
+        label 'master' 
+        }
+    options{
+        timestamps()
+        }
+    parameters {
+        choice(choices: ['dev1','dev2'], description: 'Name dev', name: 'DEV')
+        string(defaultValue: "", description: '', name: 'VERSION')
+    }
+    stages{
+        /*stages section*/
+        stage('Initialize the variables') {
+            // Each stage is made up of steps
+            steps{
+                script{
+                    CODE_VERSION="code_version"
+                    ZIP_NODE="zip_node"
+                }
+            }                
+        }
+        stage ('code - Checkout') {
+            steps{
+                echo "Checkout"
+                echo "${DEV}"
+                echo "${CODE_VERSION}"
+            }  
+        }
+        
+        stage ('code - Build'){
+            steps{
+                echo "Build"
+                echo "${VERSION}"
+                echo "${ZIP_NODE}"
+            }
+        }
+    } 
+}
