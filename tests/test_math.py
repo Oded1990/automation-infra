@@ -1,8 +1,13 @@
+import pytest
+import logging
+
+@pytest.mark.tier1
 def test_sum():
-    print('1+1=?2')
+    logging.info("test_sum")
     assert 1+1 == 2
 
 
+@pytest.mark.tier2
 def test_mul():
-    print('1*1=?1')
+    logging.info("test_mul")
     assert 1*1 == 1
