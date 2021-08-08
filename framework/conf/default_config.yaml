@@ -1,0 +1,13 @@
+# in this RUN section we will keep default parameters
+RUN:
+  log_dir: "/tmp"
+  run_id: null
+
+# This section is related to ui testing with selenium
+UI_SELENIUM:
+  browser_type: "chrome"
+  chrome_type: "google-chrome"
+  headless: False
+  screenshot: True
+  ignore_ssl: True
+  url: "http://127.0.0.1:5000"
