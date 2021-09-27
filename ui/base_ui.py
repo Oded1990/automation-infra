@@ -6,6 +6,7 @@ import time
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -136,7 +137,7 @@ def login_ui():
             options=chrome_options,
         )
     elif browser == "firefox":
-        driver = webdriver.Firefox()
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
     else:
         raise ValueError(f"Not Support on {browser}")
     driver.maximize_window()
