@@ -1,10 +1,14 @@
 pipeline{
     /*A declarative pipeline*/
     agent {
+        // docker {image 'python:3.7.2'}
         /*Agent section*/ 
         // where would you like to run the code 
         label 'master' 
         }
+    environment { 
+        VERSION = 'Version_1_2'
+    }
     options{
         timestamps()
         }
@@ -14,9 +18,22 @@ pipeline{
     }
     stages{
         /*stages section*/
+        stage ('Deploy Web Server') {
+            steps{
+                echo "Git clone"
+                sh "pwd"
+                echo "${VERSION}"
+                git branch: 'master',
+                    url: 'https://github.com/Oded1990/flask-web.git'
+                sh "docker build --tag flask-web ."
+                sh "docker run --publish 5000:5000 --name web-container -d flask-web"
+            }  
+        }
+        
         stage ('Clone Repository') {
             steps{
                 echo "Git clone"
+                echo "${VERSION}"
                 git branch: 'main',
                     url: 'https://github.com/Oded1990/automation-infra.git'
                 sh "ls -lat"
@@ -39,13 +56,39 @@ pipeline{
         
         stage ('Test'){
             steps{
+                script {
+                    def test_suite = "${params.MARKER}"
+                    if(test_suite == "tier1") {
+                        echo "Oded tier1"    
+                    } 
+                    else {
+                        echo "No tier1"
+                    }
+                }
                 echo "Test"
                 echo "test path:${params.TEST_PATH}"
                 sh """
                     . venv/bin/activate
-                    pytest ${params.TEST_PATH} -m ${params.MARK}
+                    pytest ${params.TEST_PATH} -m ${params.MARKER}
                     """
             }
         }
+        
+        stage ('Teardown'){
+            steps{
+                sh "docker rm web-container -f"
+                sh "docker image rm flask-web"
+                
+            }
+        }
     } 
+    
+    post {
+        always {
+            junit(
+                allowEmptyResults: true,
+                testResults: '**/test-reports/*.xml'
+            )
+        }
+    }
 }

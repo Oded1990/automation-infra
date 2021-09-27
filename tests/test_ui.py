@@ -13,7 +13,6 @@ class TestUserInterface(object):
     Test User Interface Validation
 
     """
-
     @ui_mark
     @pytest.mark.parametrize("version_id", [os.getenv("version_web")])
     def test_version_ui(self, setup_ui, version_id):
