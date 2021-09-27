@@ -1,3 +1,4 @@
 import pytest
 
-ui_mark = pytest.mark.ui_mark(value=1)
+tier1 = pytest.mark.ui_mark(value=1)
+ui_mark = pytest.mark.ui_mark(value=2)

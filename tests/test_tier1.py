@@ -15,7 +15,7 @@ class TestUserInterface(object):
     """
     @ui_mark
     @pytest.mark.parametrize("version_id", [os.getenv("version_web")])
-    def test_version_ui(self, setup_ui, version_id):
+    def test_ui(self, setup_ui, version_id):
         """
         Validate User Interface
 
@@ -28,7 +28,7 @@ class TestUserInterface(object):
 
     @tier1
     @pytest.mark.parametrize("version_id", [os.getenv("version_web")])
-    def test_version_tier1(self, setup_ui, version_id):
+    def test_tier1(self, setup_ui, version_id):
         """
         Validate User Interface
 
