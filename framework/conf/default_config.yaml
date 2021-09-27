@@ -10,4 +10,4 @@ UI_SELENIUM:
   headless: False
   screenshot: True
   ignore_ssl: True
-  url: "http://127.0.0.1:5000"
+  url: "http://192.168.99.101:5000/"

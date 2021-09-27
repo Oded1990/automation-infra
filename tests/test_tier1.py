@@ -8,7 +8,7 @@ from ui.version_ui import VersionUI
 logger = logging.getLogger(__name__)
 
 
-class TestUserInterface(object):
+class TestUserInterface1(object):
     """
     Test User Interface Validation
 
