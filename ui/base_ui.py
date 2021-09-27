@@ -137,7 +137,7 @@ def login_ui():
             options=chrome_options,
         )
     elif browser == "firefox":
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+        driver = webdriver.Firefox(executable_path="/usr/local/bin/geckodriver")
     else:
         raise ValueError(f"Not Support on {browser}")
     driver.maximize_window()
