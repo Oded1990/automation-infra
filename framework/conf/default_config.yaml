@@ -5,7 +5,7 @@ RUN:
 
 # This section is related to ui testing with selenium
 UI_SELENIUM:
-  browser_type: "chrome"
+  browser_type: "firefox"
   chrome_type: "google-chrome"
   headless: False
   screenshot: True

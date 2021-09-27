@@ -135,6 +135,8 @@ def login_ui():
             ChromeDriverManager(chrome_type=chrome_browser_type).install(),
             options=chrome_options,
         )
+    elif browser == "firefox":
+        driver = webdriver.Firefox()
     else:
         raise ValueError(f"Not Support on {browser}")
     driver.maximize_window()
