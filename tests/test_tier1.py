@@ -19,3 +19,5 @@ class TestUserInterface1(object):
         Validate User Interface
         """
         logger.info(version_id)
+        logger.info(f"oded viner 1 version:{version_id}")
+        print(f"oded viner 2 version 2:{version_id}")
