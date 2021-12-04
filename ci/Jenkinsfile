@@ -1,20 +1,20 @@
 pipeline{
     /*A declarative pipeline*/
     agent {
-        // docker {image 'python:3.7.2'}
         /*Agent section*/ 
         // where would you like to run the code 
         label 'master' 
         }
     environment { 
-        VERSION = 'Version_1_2'
+        VERSION = 'Version 1'
     }
     options{
         timestamps()
         }
     parameters {
-        string(name: 'TEST_PATH', description: 'test path')
+        string(defaultValue: '/tests/test_tier1.py', name: 'TEST_PATH', description: 'test path')
         choice(name: 'MARKER', choices: ['tier1', 'tier2'], description: 'Choose test suite')
+        choice(name: 'VERSION', choices: ['1','2'], description: 'Choose version')
     }
     stages{
         /*stages section*/
@@ -27,22 +27,21 @@ pipeline{
                     url: 'https://github.com/Oded1990/flask-web.git'
                 sh "docker build --tag flask-web ."
                 sh "docker run --publish 5000:5000 --name web-container -d flask-web"
-            }  
+            }
         }
-        
-        stage ('Clone Repository') {
+        stage ('Test'){
             steps{
+                echo "test path:${params.TEST_PATH}"
+                echo "test suite:${params.MARKER}"
+                echo "vesion:${params.VERSION}"
+
                 echo "Git clone"
                 echo "${VERSION}"
                 git branch: 'main',
                     url: 'https://github.com/Oded1990/automation-infra.git'
                 sh "ls -lat"
                 sh "pwd"
-            }  
-        }
-        
-        stage ('Create Virtaul Environment'){
-            steps{
+
                 echo "Create venv"
                 sh "python3 -m venv venv"
                 sh """
@@ -50,39 +49,27 @@ pipeline{
                     pip install -r requirements.txt
                     deactivate
                     """
-               
-            }
-        }
-        
-        stage ('Test'){
-            steps{
-                script {
-                    def test_suite = "${params.MARKER}"
-                    if(test_suite == "tier1") {
-                        echo "Oded tier1"    
-                    } 
-                    else {
-                        echo "No tier1"
-                    }
-                }
-                echo "Test"
-                echo "test path:${params.TEST_PATH}"
+
+                echo "Run pytest framework"
                 sh """
                     . venv/bin/activate
-                    pytest ${params.TEST_PATH} -m ${params.MARKER}
+                    pytest --version_web ${params.VERSION} ${params.TEST_PATH}
                     """
+
+
             }
         }
-        
+
         stage ('Teardown'){
             steps{
-                sh "docker rm web-container -f"
+                sh "docker container stop web-container"
+                sh "docker container rm web-container"
                 sh "docker image rm flask-web"
-                
+
             }
         }
-    } 
-    
+    }
+
     post {
         always {
             junit(
